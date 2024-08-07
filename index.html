@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>逐字显示“我爱你”并在末尾闪烁爱心</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(45deg, #ffcccc, #ff80bf);
+      overflow: hidden; /* 禁止页面滚动 */
+    }
+
+    .text {
+      font-size: 72px; /* 放大字体 */
+      font-weight: bold;
+      white-space: nowrap;
+      overflow: hidden;
+      position: relative; /* 爱心的父容器 */
+      text-align: center; /* 文字居中显示 */
+    }
+
+    .text span {
+      display: inline-block;
+      width: 0;
+      opacity: 0;
+      animation: reveal 1.5s forwards; /* 调整动画时间为1.5秒 */
+      animation-delay: calc(0.5s * var(--index)); /* 根据索引延迟显示 */
+    }
+
+    .text span:nth-child(n+4):nth-child(-n+9),
+    .text span:nth-child(n+13):nth-child(-n+17) {
+      color: red; /* 红色文字 */
+    }
+
+    @keyframes reveal {
+      to {
+        width: auto;
+        opacity: 1;
+      }
+    }
+
+    .hearts-container {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .heart {
+      width: 20px;
+      height: 20px;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24"><path fill="%23FF4081" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>');
+      background-size: contain;
+      background-repeat: no-repeat;
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      animation: heartFadeIn 2s forwards, heartBlink 4s infinite alternate;
+    }
+
+    @keyframes heartFadeIn {
+      0% {
+        opacity: 0;
+        transform: scale(0.5);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    /* 不同心型的闪动频率和大小 */
+    .heart:nth-child(2n+1) {
+      width: 30px;
+      height: 30px;
+      animation-duration: 3s; /* 较慢的闪烁频率 */
+    }
+
+    .heart:nth-child(3n+1) {
+      width: 15px;
+      height: 15px;
+      animation-duration: 1.5s; /* 较快的闪烁频率 */
+    }
+
+    @keyframes heartBlink {
+      0% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0.2;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="text">
+    <span style="--index: 1;">我</span>
+    <span style="--index: 2;">爱</span>
+    <span style="--index: 3;">你</span>
+    <span style="--index: 4; animation-delay: 3s;">❤</span>
+    <span style="--index: 5; animation-delay: 3.5s;">❤</span>
+    <span style="--index: 6; animation-delay: 4s;">❤</span>
+    <span style="--index: 7; animation-delay: 4.5s;">❤</span>
+    <span style="--index: 8; animation-delay: 5s;">❤</span>
+    <span style="--index: 9; animation-delay: 5.5s;">❤</span>
+    <span style="--index: 10; animation-delay: 8s;">祝</span>
+    <span style="--index: 11; animation-delay: 9s;">韵</span>
+    <span style="--index: 12; animation-delay: 10s;">甜</span>
+    <span style="--index: 13; animation-delay: 11s;">❤</span>
+    <span style="--index: 14; animation-delay: 12s;">❤</span>
+    <span style="--index: 15; animation-delay: 13s;">❤</span>
+    <span style="--index: 16; animation-delay: 14s;">❤</span>
+    <span style="--index: 17; animation-delay: 15s;">❤</span>
+  </div>
+  
+  <div class="hearts-container">
+    <!-- Generate 520 hearts -->
+    <script>
+      function getRandomPosition() {
+        var x = window.innerWidth * Math.random();
+        var y = window.innerHeight * Math.random();
+        return { x: x, y: y };
+      }
+
+      var container = document.querySelector('.hearts-container');
+      for (var i = 0; i < 520; i++) { // 生成 520 个爱心
+        var heart = document.createElement('div');
+        heart.className = 'heart';
+        var pos = getRandomPosition();
+        heart.style.top = pos.y + 'px';
+        heart.style.left = pos.x + 'px';
+        container.appendChild(heart);
+      }
+    </script>
+  </div>
+</body>
+</html>
